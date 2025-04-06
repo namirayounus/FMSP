@@ -36,6 +36,19 @@
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
+        .back-button {
+            display: inline-block;
+            background-color: #4a7a2e; /* Farm green */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+        .back-button:hover {
+            background-color: #3a6224; /* Slightly darker green on hover */
+        }
     </style>
 </head>
 <body>
@@ -50,6 +63,7 @@
         {% endif %}
     </nav>
     <h1>Welcome to the Farm Management System</h1>
+    <a href="javascript:history.back()" class="back-button">Back</a>
     <div class="content">
         {% block content %}
         {% endblock %}
