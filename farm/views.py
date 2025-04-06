@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
-from .models import Task
-from .forms import TaskForm
+from .models import Task, Crop
+from .forms import TaskForm, CropForm
 
 def home(request):
     if request.user.is_authenticated:
@@ -59,3 +59,41 @@ def task_delete(request, task_id):
         task.delete()
         return redirect('farm:home')
     return render(request, 'farm/task_confirm_delete.html', {'task': task})
+
+@login_required
+def crop_list(request):
+    crops = Crop.objects.filter(user=request.user)
+    return render(request, 'farm/crop_list.html', {'crops': crops})
+
+@login_required
+def crop_create(request):
+    if request.method == 'POST':
+        form = CropForm(request.POST)
+        if form.is_valid():
+            crop = form.save(commit=False)
+            crop.user = request.user
+            crop.save()
+            return redirect('farm:crop_list')
+    else:
+        form = CropForm()
+    return render(request, 'farm/crop_form.html', {'form': form, 'action': 'Create'})
+
+@login_required
+def crop_update(request, crop_id):
+    crop = Crop.objects.get(id=crop_id, user=request.user)
+    if request.method == 'POST':
+        form = CropForm(request.POST, instance=crop)
+        if form.is_valid():
+            form.save()
+            return redirect('farm:crop_list')
+    else:
+        form = CropForm(instance=crop)
+    return render(request, 'farm/crop_form.html', {'form': form, 'action': 'Update'})
+
+@login_required
+def crop_delete(request, crop_id):
+    crop = Crop.objects.get(id=crop_id, user=request.user)
+    if request.method == 'POST':
+        crop.delete()
+        return redirect('farm:crop_list')
+    return render(request, 'farm/crop_confirm_delete.html', {'crop': crop})

@@ -1,0 +1,29 @@
+{% extends 'farm/base.html' %}
+
+{% block content %}
+    <h2>Your Crops</h2>
+    <a href="{% url 'farm:crop_create' %}" style="display: inline-block; background-color: #4a7a2e; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin-bottom: 20px;">Add New Crop</a>
+    {% if crops %}
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr style="background-color: #8ab86d; color: white;">
+                <th style="padding: 10px;">Name</th>
+                <th style="padding: 10px;">Planting Date</th>
+                <th style="padding: 10px;">Harvest Date</th>
+                <th style="padding: 10px;">Actions</th>
+            </tr>
+            {% for crop in crops %}
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <td style="padding: 10px;">{{ crop.name }}</td>
+                    <td style="padding: 10px;">{{ crop.planting_date }}</td>
+                    <td style="padding: 10px;">{{ crop.harvest_date }}</td>
+                    <td style="padding: 10px;">
+                        <a href="{% url 'farm:crop_update' crop.id %}" style="color: #4a7a2e;">Edit</a> |
+                        <a href="{% url 'farm:crop_delete' crop.id %}" style="color: #a94442;">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No crops yet. Start by adding one!</p>
+    {% endif %}
+{% endblock %}

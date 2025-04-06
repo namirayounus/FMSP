@@ -10,3 +10,14 @@ class Task(models.Model):
 
     def __str__(self):
         return self.description
+    
+class Crop(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    planting_date = models.DateField()
+    harvest_date = models.DateField()
+    notes = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
