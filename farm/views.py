@@ -1,9 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout
+from .models import Task
 
 def home(request):
-    return render(request, 'farm/home.html')
+    if request.user.is_authenticated:
+        tasks = Task.objects.filter(user=request.user)
+    else:
+        tasks = None
+    return render(request, 'farm/home.html', {'tasks': tasks})
 
 def register(request):
     if request.method == 'POST':

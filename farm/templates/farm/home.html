@@ -3,6 +3,27 @@
 {% block content %}
     {% if user.is_authenticated %}
         <p>Hello, {{ user.username }}! Manage your farm with ease.</p>
+        <h2>Your Farm Tasks</h2>
+        {% if tasks %}
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr style="background-color: #8ab86d; color: white;">
+                    <th style="padding: 10px;">Description</th>
+                    <th style="padding: 10px;">Due Date</th>
+                    <th style="padding: 10px;">Completed</th>
+                </tr>
+                {% for task in tasks %}
+                    <tr style="border-bottom: 1px solid #ddd;">
+                        <td style="padding: 10px;">{{ task.description }}</td>
+                        <td style="padding: 10px;">{{ task.due_date }}</td>
+                        <td style="padding: 10px;">
+                            {% if task.completed %}Yes{% else %}No{% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>No tasks yet. Add some in the admin panel!</p>
+        {% endif %}
     {% else %}
         <p>Please log in or register to manage your farm.</p>
     {% endif %}
