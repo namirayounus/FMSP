@@ -4,14 +4,24 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from .models import Task, Crop, Livestock, Finance, Profile
 from .forms import TaskForm, CropForm, LivestockForm, FinanceForm, ProfileForm
+from django.utils import timezone
+from datetime import timedelta
 
 def home(request):
     if request.user.is_authenticated:
         tasks = Task.objects.filter(user=request.user)
         Profile.objects.get_or_create(user=request.user)
+        today = timezone.now().date()
+        two_days_from_now = today + timedelta(days=2)
+        upcoming_tasks = Task.objects.filter(
+            user=request.user,
+            due_date__range=[today, two_days_from_now],
+            completed=False
+        )
     else:
         tasks = None
-    return render(request, 'farm/home.html', {'tasks': tasks})
+        upcoming_tasks = None
+    return render(request, 'farm/home.html', {'tasks': tasks, 'upcoming_tasks': upcoming_tasks})
 
 def register(request):
     if request.method == 'POST':

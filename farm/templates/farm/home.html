@@ -10,6 +10,18 @@
         {% else %}
             <p><a href="{% url 'farm:profile_update' %}" style="display: inline-block; background-color: #4a7a2e; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none;">Add Profile Picture</a></p>
         {% endif %}
+        {% if upcoming_tasks %}
+            <div style="background-color: #fff3cd; border: 1px solid #ffeeba; padding: 15px; margin-bottom: 20px; border-radius: 5px;">
+                <h3 style="color: #856404; margin-top: 0;">Upcoming Tasks</h3>
+                <ul style="list-style-type: none; padding: 0;">
+                    {% for task in upcoming_tasks %}
+                        <li style="margin-bottom: 10px;">
+                            <span style="color: #4a7a2e;">{{ task.description }}</span> - Due: {{ task.due_date }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
         <p><a href="{% url 'farm:crop_list' %}" style="color: #4a7a2e;">View Your Crops</a></p>
         <p><a href="{% url 'farm:livestock_list' %}" style="color: #4a7a2e;">View Your Livestock</a></p>
         <p><a href="{% url 'farm:finance_list' %}" style="color: #4a7a2e;">View Your Finances</a></p>
