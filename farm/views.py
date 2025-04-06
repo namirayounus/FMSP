@@ -177,13 +177,16 @@ def finance_delete(request, finance_id):
 
 @login_required
 def profile_update(request):
-    # Create a profile if it doesn't exist
     profile, created = Profile.objects.get_or_create(user=request.user)
     if request.method == 'POST':
+        if 'remove_picture' in request.POST:
+            if profile.profile_picture:
+                profile.profile_picture.delete(save=True)  # Deletes the file and clears the field
+            return redirect('farm:home')
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
             return redirect('farm:home')
     else:
         form = ProfileForm(instance=profile)
-    return render(request, 'farm/profile_form.html', {'form': form})
+    return render(request, 'farm/profile_form.html', {'form': form, 'profile': profile})
