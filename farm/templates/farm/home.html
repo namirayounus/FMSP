@@ -4,25 +4,29 @@
     {% if user.is_authenticated %}
         <p>Hello, {{ user.username }}! Manage your farm with ease.</p>
         <h2>Your Farm Tasks</h2>
+        <a href="{% url 'task_create' %}" style="display: inline-block; background-color: #4a7a2e; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin-bottom: 20px;">Add New Task</a>
         {% if tasks %}
             <table style="width: 100%; border-collapse: collapse;">
                 <tr style="background-color: #8ab86d; color: white;">
                     <th style="padding: 10px;">Description</th>
                     <th style="padding: 10px;">Due Date</th>
                     <th style="padding: 10px;">Completed</th>
+                    <th style="padding: 10px;">Actions</th>
                 </tr>
                 {% for task in tasks %}
                     <tr style="border-bottom: 1px solid #ddd;">
                         <td style="padding: 10px;">{{ task.description }}</td>
                         <td style="padding: 10px;">{{ task.due_date }}</td>
+                        <td style="padding: 10px;">{% if task.completed %}Yes{% else %}No{% endif %}</td>
                         <td style="padding: 10px;">
-                            {% if task.completed %}Yes{% else %}No{% endif %}
+                            <a href="{% url 'task_update' task.id %}" style="color: #4a7a2e;">Edit</a> |
+                            <a href="{% url 'task_delete' task.id %}" style="color: #a94442;">Delete</a>
                         </td>
                     </tr>
                 {% endfor %}
             </table>
         {% else %}
-            <p>No tasks yet. Add some in the admin panel!</p>
+            <p>No tasks yet. Start by adding one!</p>
         {% endif %}
     {% else %}
         <p>Please log in or register to manage your farm.</p>
