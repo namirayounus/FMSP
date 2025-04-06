@@ -2,7 +2,7 @@
 
 {% block content %}
     {% if user.is_authenticated %}
-        <p>Hello, {{ user.username }}! Manage your farm with ease.</p>
+        <p>Hello, {{ user.username }}!</p>
         {% if user.profile.profile_picture %}
             <a href="{% url 'farm:profile_update' %}">
                 <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; cursor: pointer;">
@@ -22,10 +22,10 @@
                 </ul>
             </div>
         {% endif %}
-        <p><a href="{% url 'farm:dashboard' %}" style="color: #4a7a2e;">View Dashboard</a></p>
-        <p><a href="{% url 'farm:crop_list' %}" style="color: #4a7a2e;">View Your Crops</a></p>
-        <p><a href="{% url 'farm:livestock_list' %}" style="color: #4a7a2e;">View Your Livestock</a></p>
-        <p><a href="{% url 'farm:finance_list' %}" style="color: #4a7a2e;">View Your Finances</a></p>
+        <p><a href="{% url 'farm:dashboard' %}" style="display: inline-block; background-color: #4a7a2e; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin-bottom: 20px;">Dashboard</a>
+        <a href="{% url 'farm:crop_list' %}" style="display: inline-block; background-color: #4a7a2e; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin-bottom: 20px;">Crops</a>
+        <a href="{% url 'farm:livestock_list' %}" style="display: inline-block; background-color: #4a7a2e; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin-bottom: 20px;">Livestock</a>
+        <a href="{% url 'farm:finance_list' %}" style="display: inline-block; background-color: #4a7a2e; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin-bottom: 20px;">Finances</a></p>
         <h2>Your Farm Tasks</h2>
         <form method="get" style="margin-bottom: 20px;">
             <input type="text" name="search" value="{{ search_query }}" placeholder="Search tasks by description..." style="padding: 8px; width: 70%; border: 1px solid #4a7a2e; border-radius: 5px;">
