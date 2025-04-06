@@ -9,7 +9,9 @@
             {% if upcoming_tasks %}
                 <ul style="list-style-type: none; padding: 0;">
                     {% for task in upcoming_tasks %}
-                        <li style="margin-bottom: 10px;">{{ task.description }} - Due: {{ task.due_date }}</li>
+                    <li style="margin-bottom: 10px; {% if task.status == 'overdue' %}color: #a94442; font-weight: bold;{% endif %}">
+                        {{ task.description }} - Due: {{ task.due_date }} {% if task.status == 'overdue' %}(Overdue!)💧{% endif %}
+                    </li>
                     {% endfor %}
                 </ul>
             {% else %}

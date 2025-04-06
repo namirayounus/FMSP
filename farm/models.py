@@ -1,12 +1,29 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 class Task(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('in_progress', 'In Progress'),
+        ('completed', 'Completed'),
+        ('overdue', 'Overdue'),
+    ]
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     description = models.CharField(max_length=200)
     due_date = models.DateField()
     completed = models.BooleanField(default=False)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        # Automatically set status based on due date and completion
+        today = timezone.now().date()
+        if self.completed:
+            self.status = 'completed'
+        elif self.due_date < today and not self.completed:
+            self.status = 'overdue'
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.description
