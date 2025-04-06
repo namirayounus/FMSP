@@ -63,7 +63,9 @@
         {% endif %}
     </nav>
     <h1>Welcome to the Farm Management System</h1>
-    <a href="javascript:history.back()" class="back-button">Back</a>
+    {% if request.path != '/' %}
+        <a href="javascript:history.back()" class="back-button">Back</a>
+    {% endif %}
     <div class="content">
         {% block content %}
         {% endblock %}
