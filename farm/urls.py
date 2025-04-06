@@ -13,4 +13,8 @@ urlpatterns = [
     path('crop/new/', views.crop_create, name='crop_create'),
     path('crop/<int:crop_id>/update/', views.crop_update, name='crop_update'),
     path('crop/<int:crop_id>/delete/', views.crop_delete, name='crop_delete'),
+    path('livestock/', views.livestock_list, name='livestock_list'),
+    path('livestock/new/', views.livestock_create, name='livestock_create'),
+    path('livestock/<int:livestock_id>/update/', views.livestock_update, name='livestock_update'),
+    path('livestock/<int:livestock_id>/delete/', views.livestock_delete, name='livestock_delete'),
 ]

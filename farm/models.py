@@ -21,3 +21,14 @@ class Crop(models.Model):
 
     def __str__(self):
         return self.name
+    
+class Livestock(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    type = models.CharField(max_length=100)  # e.g., "Cow", "Chicken"
+    name = models.CharField(max_length=100)
+    birth_date = models.DateField()
+    health_status = models.CharField(max_length=100, default="Healthy")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} ({self.type})"

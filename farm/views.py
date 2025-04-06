@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
-from .models import Task, Crop
-from .forms import TaskForm, CropForm
+from .models import Task, Crop, Livestock
+from .forms import TaskForm, CropForm, LivestockForm
 
 def home(request):
     if request.user.is_authenticated:
@@ -97,3 +97,41 @@ def crop_delete(request, crop_id):
         crop.delete()
         return redirect('farm:crop_list')
     return render(request, 'farm/crop_confirm_delete.html', {'crop': crop})
+
+@login_required
+def livestock_list(request):
+    livestock = Livestock.objects.filter(user=request.user)
+    return render(request, 'farm/livestock_list.html', {'livestock': livestock})
+
+@login_required
+def livestock_create(request):
+    if request.method == 'POST':
+        form = LivestockForm(request.POST)
+        if form.is_valid():
+            livestock = form.save(commit=False)
+            livestock.user = request.user
+            livestock.save()
+            return redirect('farm:livestock_list')
+    else:
+        form = LivestockForm()
+    return render(request, 'farm/livestock_form.html', {'form': form, 'action': 'Create'})
+
+@login_required
+def livestock_update(request, livestock_id):
+    livestock = Livestock.objects.get(id=livestock_id, user=request.user)
+    if request.method == 'POST':
+        form = LivestockForm(request.POST, instance=livestock)
+        if form.is_valid():
+            form.save()
+            return redirect('farm:livestock_list')
+    else:
+        form = LivestockForm(instance=livestock)
+    return render(request, 'farm/livestock_form.html', {'form': form, 'action': 'Update'})
+
+@login_required
+def livestock_delete(request, livestock_id):
+    livestock = Livestock.objects.get(id=livestock_id, user=request.user)
+    if request.method == 'POST':
+        livestock.delete()
+        return redirect('farm:livestock_list')
+    return render(request, 'farm/livestock_confirm_delete.html', {'livestock': livestock})

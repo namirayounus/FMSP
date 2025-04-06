@@ -1,0 +1,31 @@
+{% extends 'farm/base.html' %}
+
+{% block content %}
+    <h2>Your Livestock</h2>
+    <a href="{% url 'farm:livestock_create' %}" style="display: inline-block; background-color: #4a7a2e; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin-bottom: 20px;">Add New Animal</a>
+    {% if livestock %}
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr style="background-color: #8ab86d; color: white;">
+                <th style="padding: 10px;">Type</th>
+                <th style="padding: 10px;">Name</th>
+                <th style="padding: 10px;">Birth Date</th>
+                <th style="padding: 10px;">Health Status</th>
+                <th style="padding: 10px;">Actions</th>
+            </tr>
+            {% for animal in livestock %}
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <td style="padding: 10px;">{{ animal.type }}</td>
+                    <td style="padding: 10px;">{{ animal.name }}</td>
+                    <td style="padding: 10px;">{{ animal.birth_date }}</td>
+                    <td style="padding: 10px;">{{ animal.health_status }}</td>
+                    <td style="padding: 10px;">
+                        <a href="{% url 'farm:livestock_update' animal.id %}" style="color: #4a7a2e;">Edit</a> |
+                        <a href="{% url 'farm:livestock_delete' animal.id %}" style="color: #a94442;">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No livestock yet. Start by adding one!</p>
+    {% endif %}
+{% endblock %}

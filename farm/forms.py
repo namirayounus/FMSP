@@ -1,5 +1,5 @@
 from django import forms
-from .models import Task, Crop
+from .models import Task, Crop, Livestock
 
 class TaskForm(forms.ModelForm):
     class Meta:
@@ -16,4 +16,12 @@ class CropForm(forms.ModelForm):
         widgets = {
             'planting_date': forms.DateInput(attrs={'type': 'date'}),
             'harvest_date': forms.DateInput(attrs={'type': 'date'}),
+        }
+
+class LivestockForm(forms.ModelForm):
+    class Meta:
+        model = Livestock
+        fields = ['type', 'name', 'birth_date', 'health_status']
+        widgets = {
+            'birth_date': forms.DateInput(attrs={'type': 'date'}),
         }
