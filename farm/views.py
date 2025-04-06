@@ -35,7 +35,7 @@ def task_create(request):
             task = form.save(commit=False)
             task.user = request.user
             task.save()
-            return redirect('home')
+            return redirect('farm:home')
     else:
         form = TaskForm()
     return render(request, 'farm/task_form.html', {'form': form, 'action': 'Create'})
@@ -47,7 +47,7 @@ def task_update(request, task_id):
         form = TaskForm(request.POST, instance=task)
         if form.is_valid():
             form.save()
-            return redirect('home')
+            return redirect('farm:home')
     else:
         form = TaskForm(instance=task)
     return render(request, 'farm/task_form.html', {'form': form, 'action': 'Update'})
@@ -57,5 +57,5 @@ def task_delete(request, task_id):
     task = Task.objects.get(id=task_id, user=request.user)
     if request.method == 'POST':
         task.delete()
-        return redirect('home')
+        return redirect('farm:home')
     return render(request, 'farm/task_confirm_delete.html', {'task': task})
