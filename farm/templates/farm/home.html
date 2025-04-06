@@ -2,14 +2,16 @@
 
 {% block content %}
     {% if user.is_authenticated %}
-        <p>Hello, {{ user.username }}!</p>
-        {% if user.profile.profile_picture %}
-            <a href="{% url 'farm:profile_update' %}">
-                <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; cursor: pointer;">
-            </a>
-        {% else %}
-            <p><a href="{% url 'farm:profile_update' %}" style="display: inline-block; background-color: #4a7a2e; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none;">Add Profile Picture</a></p>
-        {% endif %}
+        <div style="max-width: 600px; margin: 20px auto; background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.1); border: 2px solid #8ab86d; text-align: center;">
+            <h2 style="color: #4a7a2e; margin-top: 0;">Welcome, {{ user.username }}! 🌾</h2>
+            {% if user.profile.profile_picture %}
+                <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture" style="width: 100px; height: 100px; border-radius: 50%; border: 3px solid #4a7a2e; object-fit: cover; margin-bottom: 10px;">
+            {% else %}
+                <div style="width: 100px; height: 100px; background-color: #f0f7e6; border-radius: 50%; display: inline-block; line-height: 100px; color: #4a7a2e; font-size: 16px; border: 3px solid #4a7a2e; margin-bottom: 10px;">No Picture</div>
+            {% endif %}
+            <p style="color: #4a7a2e; font-size: 14px;">Joined: {{ user.date_joined|date:"F j, Y" }}</p>
+            <p><a href="{% url 'farm:profile_update' %}" style="color: #4a7a2e; text-decoration: underline;">Edit Profile</a></p>
+        </div>
         {% if upcoming_tasks %}
             <div style="background-color: #fff3cd; border: 1px solid #ffeeba; padding: 15px; margin-bottom: 20px; border-radius: 5px;">
                 <h3 style="color: #856404; margin-top: 0;">Upcoming Tasks</h3>
