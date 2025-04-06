@@ -1,5 +1,5 @@
 from django import forms
-from .models import Task
+from .models import Task, Crop
 
 class TaskForm(forms.ModelForm):
     class Meta:
