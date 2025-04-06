@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
-from .models import Task, Crop, Livestock
-from .forms import TaskForm, CropForm, LivestockForm
+from .models import Task, Crop, Livestock, Finance
+from .forms import TaskForm, CropForm, LivestockForm, FinanceForm
 
 def home(request):
     if request.user.is_authenticated:
@@ -135,3 +135,41 @@ def livestock_delete(request, livestock_id):
         livestock.delete()
         return redirect('farm:livestock_list')
     return render(request, 'farm/livestock_confirm_delete.html', {'livestock': livestock})
+
+@login_required
+def finance_list(request):
+    finances = Finance.objects.filter(user=request.user)
+    return render(request, 'farm/finance_list.html', {'finances': finances})
+
+@login_required
+def finance_create(request):
+    if request.method == 'POST':
+        form = FinanceForm(request.POST)
+        if form.is_valid():
+            finance = form.save(commit=False)
+            finance.user = request.user
+            finance.save()
+            return redirect('farm:finance_list')
+    else:
+        form = FinanceForm()
+    return render(request, 'farm/finance_form.html', {'form': form, 'action': 'Create'})
+
+@login_required
+def finance_update(request, finance_id):
+    finance = Finance.objects.get(id=finance_id, user=request.user)
+    if request.method == 'POST':
+        form = FinanceForm(request.POST, instance=finance)
+        if form.is_valid():
+            form.save()
+            return redirect('farm:finance_list')
+    else:
+        form = FinanceForm(instance=finance)
+    return render(request, 'farm/finance_form.html', {'form': form, 'action': 'Update'})
+
+@login_required
+def finance_delete(request, finance_id):
+    finance = Finance.objects.get(id=finance_id, user=request.user)
+    if request.method == 'POST':
+        finance.delete()
+        return redirect('farm:finance_list')
+    return render(request, 'farm/finance_confirm_delete.html', {'finance': finance})

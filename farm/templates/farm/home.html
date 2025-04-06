@@ -5,6 +5,7 @@
         <p>Hello, {{ user.username }}! Manage your farm with ease.</p>
         <p><a href="{% url 'farm:crop_list' %}" style="color: #4a7a2e;">View Your Crops</a></p>
         <p><a href="{% url 'farm:livestock_list' %}" style="color: #4a7a2e;">View Your Livestock</a></p>
+        <p><a href="{% url 'farm:finance_list' %}" style="color: #4a7a2e;">View Your Finances</a></p>
         <h2>Your Farm Tasks</h2>
         <a href="{% url 'farm:task_create' %}" style="display: inline-block; background-color: #4a7a2e; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin-bottom: 20px;">Add New Task</a>
         {% if tasks %}

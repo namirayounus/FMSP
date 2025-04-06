@@ -17,4 +17,8 @@ urlpatterns = [
     path('livestock/new/', views.livestock_create, name='livestock_create'),
     path('livestock/<int:livestock_id>/update/', views.livestock_update, name='livestock_update'),
     path('livestock/<int:livestock_id>/delete/', views.livestock_delete, name='livestock_delete'),
+    path('finances/', views.finance_list, name='finance_list'),
+    path('finance/new/', views.finance_create, name='finance_create'),
+    path('finance/<int:finance_id>/update/', views.finance_update, name='finance_update'),
+    path('finance/<int:finance_id>/delete/', views.finance_delete, name='finance_delete'),
 ]
