@@ -11,6 +11,11 @@ def home(request):
     if request.user.is_authenticated:
         tasks = Task.objects.filter(user=request.user)
         Profile.objects.get_or_create(user=request.user)
+        search_query = request.GET.get('search', '')
+        if search_query:
+            tasks = Task.objects.filter(user=request.user, description__icontains=search_query)
+        else:
+            tasks = Task.objects.filter(user=request.user)
         today = timezone.now().date()
         two_days_from_now = today + timedelta(days=2)
         upcoming_tasks = Task.objects.filter(
@@ -21,7 +26,12 @@ def home(request):
     else:
         tasks = None
         upcoming_tasks = None
-    return render(request, 'farm/home.html', {'tasks': tasks, 'upcoming_tasks': upcoming_tasks})
+        search_query = ''
+    return render(request, 'farm/home.html', {
+        'tasks': tasks,
+        'upcoming_tasks': upcoming_tasks,
+        'search_query': search_query
+    })
 
 def register(request):
     if request.method == 'POST':

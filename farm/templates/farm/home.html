@@ -26,6 +26,10 @@
         <p><a href="{% url 'farm:livestock_list' %}" style="color: #4a7a2e;">View Your Livestock</a></p>
         <p><a href="{% url 'farm:finance_list' %}" style="color: #4a7a2e;">View Your Finances</a></p>
         <h2>Your Farm Tasks</h2>
+        <form method="get" style="margin-bottom: 20px;">
+            <input type="text" name="search" value="{{ search_query }}" placeholder="Search tasks by description..." style="padding: 8px; width: 70%; border: 1px solid #4a7a2e; border-radius: 5px;">
+            <button type="submit" style="background-color: #4a7a2e; color: white; padding: 8px 15px; border: none; border-radius: 5px; margin-left: 10px;">Search</button>
+        </form>
         <a href="{% url 'farm:task_create' %}" style="display: inline-block; background-color: #4a7a2e; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin-bottom: 20px;">Add New Task</a>
         {% if tasks %}
             <table style="width: 100%; border-collapse: collapse;">
@@ -48,7 +52,7 @@
                 {% endfor %}
             </table>
         {% else %}
-            <p>No tasks yet. Start by adding one!</p>
+        <p>No tasks found. {% if search_query %}Try a different search term{% else %}Start by adding one!{% endif %}</p>
         {% endif %}
     {% else %}
         <p>Please log in or register to manage your farm.</p>
