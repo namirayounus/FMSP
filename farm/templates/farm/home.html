@@ -3,6 +3,11 @@
 {% block content %}
     {% if user.is_authenticated %}
         <p>Hello, {{ user.username }}! Manage your farm with ease.</p>
+        {% if user.profile.profile_picture %}
+            <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture" style="max-width: 100px; border-radius: 50%; margin-bottom: 10px;">
+        {% else %}
+            <p>No profile picture yet. <a href="{% url 'farm:profile_update' %}" style="color: #4a7a2e;">Add one!</a></p>
+        {% endif %}
         <p><a href="{% url 'farm:crop_list' %}" style="color: #4a7a2e;">View Your Crops</a></p>
         <p><a href="{% url 'farm:livestock_list' %}" style="color: #4a7a2e;">View Your Livestock</a></p>
         <p><a href="{% url 'farm:finance_list' %}" style="color: #4a7a2e;">View Your Finances</a></p>

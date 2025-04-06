@@ -21,4 +21,5 @@ urlpatterns = [
     path('finance/new/', views.finance_create, name='finance_create'),
     path('finance/<int:finance_id>/update/', views.finance_update, name='finance_update'),
     path('finance/<int:finance_id>/delete/', views.finance_delete, name='finance_delete'),
+    path('profile/', views.profile_update, name='profile_update'),
 ]

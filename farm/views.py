@@ -2,12 +2,13 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
-from .models import Task, Crop, Livestock, Finance
-from .forms import TaskForm, CropForm, LivestockForm, FinanceForm
+from .models import Task, Crop, Livestock, Finance, Profile
+from .forms import TaskForm, CropForm, LivestockForm, FinanceForm, ProfileForm
 
 def home(request):
     if request.user.is_authenticated:
         tasks = Task.objects.filter(user=request.user)
+        Profile.objects.get_or_create(user=request.user)
     else:
         tasks = None
     return render(request, 'farm/home.html', {'tasks': tasks})
@@ -173,3 +174,16 @@ def finance_delete(request, finance_id):
         finance.delete()
         return redirect('farm:finance_list')
     return render(request, 'farm/finance_confirm_delete.html', {'finance': finance})
+
+@login_required
+def profile_update(request):
+    # Create a profile if it doesn't exist
+    profile, created = Profile.objects.get_or_create(user=request.user)
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('farm:home')
+    else:
+        form = ProfileForm(instance=profile)
+    return render(request, 'farm/profile_form.html', {'form': form})
