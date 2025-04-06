@@ -210,3 +210,28 @@ def profile_update(request):
     else:
         form = ProfileForm(instance=profile)
     return render(request, 'farm/profile_form.html', {'form': form, 'profile': profile})
+
+@login_required
+def dashboard(request):
+    # Ensure profile exists
+    Profile.objects.get_or_create(user=request.user)
+    # Upcoming tasks
+    today = timezone.now().date()
+    two_days_from_now = today + timedelta(days=2)
+    upcoming_tasks = Task.objects.filter(
+        user=request.user,
+        due_date__range=[today, two_days_from_now],
+        completed=False
+    )
+    # Crop count
+    crop_count = Crop.objects.filter(user=request.user).count()
+    # Livestock count
+    livestock_count = Livestock.objects.filter(user=request.user).count()
+    # Recent finances (last 5)
+    recent_finances = Finance.objects.filter(user=request.user).order_by('-created_at')[:5]
+    return render(request, 'farm/dashboard.html', {
+        'upcoming_tasks': upcoming_tasks,
+        'crop_count': crop_count,
+        'livestock_count': livestock_count,
+        'recent_finances': recent_finances
+    })
