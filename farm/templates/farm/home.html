@@ -1,0 +1,9 @@
+{% extends 'farm/base.html' %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <p>Hello, {{ user.username }}! Manage your farm with ease.</p>
+    {% else %}
+        <p>Please log in or register to manage your farm.</p>
+    {% endif %}
+{% endblock %}

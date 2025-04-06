@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Farm Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f7e6; /* Light green farm-like background */
+            color: #2e4a1e; /* Dark green text */
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #4a7a2e; /* Farm green for headings */
+            text-align: center;
+        }
+        nav {
+            background-color: #8ab86d; /* Medium green for navigation */
+            padding: 10px;
+            text-align: center;
+        }
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .content {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        {% if user.is_authenticated %}
+            <a href="{% url 'farm:home' %}">Home</a>
+            <a href="{% url 'farm:logout' %}">Logout</a>
+        {% else %}
+            <a href="{% url 'farm:home' %}">Home</a>
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'farm:register' %}">Register</a>
+        {% endif %}
+    </nav>
+    <h1>Welcome to the Farm Management System</h1>
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>
