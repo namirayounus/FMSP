@@ -39,8 +39,19 @@ class Crop(models.Model):
     planting_date = models.DateField()
     harvest_date = models.DateField()
     notes = models.TextField(blank=True, null=True)
-    growth_stage = models.CharField(max_length=20, choices=GROWTH_STAGES, default='planted')
+    growth_stage = models.CharField(max_length=20, choices=GROWTH_STAGES, default='planted', editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        today = timezone.now().date()
+        created_date = self.created_at.date() if self.pk else today
+        if today >= self.harvest_date:
+            self.growth_stage = 'ready'
+        elif today > created_date:
+            self.growth_stage = 'growing'
+        else:
+            self.growth_stage = 'planted'
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name

@@ -84,6 +84,8 @@ def task_delete(request, task_id):
 @login_required
 def crop_list(request):
     crops = Crop.objects.filter(user=request.user)
+    for crop in crops:
+        crop.save()
     return render(request, 'farm/crop_list.html', {'crops': crops})
 
 @login_required
