@@ -168,6 +168,7 @@ def health_log_create(request, livestock_id):
             health_log = form.save(commit=False)
             health_log.livestock = livestock
             health_log.save()
+            print(f"Saved health log: {health_log.id} for {livestock.name}")
             return redirect('farm:livestock_list')
     else:
         form = HealthLogForm()
