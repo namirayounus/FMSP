@@ -3,8 +3,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import models
-from .models import Task, Crop, Livestock, Finance, Profile, HealthLog
-from .forms import TaskForm, CropForm, LivestockForm, FinanceForm, ProfileForm, HealthLogForm
+from .models import Task, Crop, Livestock, Finance, Profile, HealthLog, Inventory
+from .forms import TaskForm, CropForm, LivestockForm, FinanceForm, ProfileForm, HealthLogForm, InventoryForm
 from django.utils import timezone
 from datetime import timedelta
 
@@ -196,6 +196,44 @@ def health_log_delete(request, livestock_id, log_id):
         health_log.delete()
         return redirect('farm:livestock_list')
     return render(request, 'farm/health_log_confirm_delete.html', {'health_log': health_log, 'livestock': livestock})
+
+@login_required
+def inventory_list(request):
+    items = Inventory.objects.filter(user=request.user)
+    return render(request, 'farm/inventory_list.html', {'items': items})
+
+@login_required
+def inventory_create(request):
+    if request.method == 'POST':
+        form = InventoryForm(request.POST)
+        if form.is_valid():
+            item = form.save(commit=False)
+            item.user = request.user
+            item.save()
+            return redirect('farm:inventory_list')
+    else:
+        form = InventoryForm()
+    return render(request, 'farm/inventory_form.html', {'form': form, 'action': 'Add'})
+
+@login_required
+def inventory_update(request, item_id):
+    item = Inventory.objects.get(id=item_id, user=request.user)
+    if request.method == 'POST':
+        form = InventoryForm(request.POST, instance=item)
+        if form.is_valid():
+            form.save()
+            return redirect('farm:inventory_list')
+    else:
+        form = InventoryForm(instance=item)
+    return render(request, 'farm/inventory_form.html', {'form': form, 'action': 'Update'})
+
+@login_required
+def inventory_delete(request, item_id):
+    item = Inventory.objects.get(id=item_id, user=request.user)
+    if request.method == 'POST':
+        item.delete()
+        return redirect('farm:inventory_list')
+    return render(request, 'farm/inventory_confirm_delete.html', {'item': item})
 
 @login_required
 def finance_list(request):

@@ -24,6 +24,10 @@ urlpatterns = [
     path('finance/new/', views.finance_create, name='finance_create'),
     path('finance/<int:finance_id>/update/', views.finance_update, name='finance_update'),
     path('finance/<int:finance_id>/delete/', views.finance_delete, name='finance_delete'),
+    path('inventory/', views.inventory_list, name='inventory_list'),
+    path('inventory/new/', views.inventory_create, name='inventory_create'),
+    path('inventory/<int:item_id>/update/', views.inventory_update, name='inventory_update'),
+    path('inventory/<int:item_id>/delete/', views.inventory_delete, name='inventory_delete'),
     path('profile/', views.profile_update, name='profile_update'),
     path('dashboard/', views.dashboard, name='dashboard'),
 ]
