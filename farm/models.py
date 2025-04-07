@@ -29,11 +29,17 @@ class Task(models.Model):
         return self.description
     
 class Crop(models.Model):
+    GROWTH_STAGES = [
+        ('planted', 'Planted'),
+        ('growing', 'Growing'),
+        ('ready', 'Ready to Harvest'),
+    ]
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     planting_date = models.DateField()
     harvest_date = models.DateField()
     notes = models.TextField(blank=True, null=True)
+    growth_stage = models.CharField(max_length=20, choices=GROWTH_STAGES, default='planted')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

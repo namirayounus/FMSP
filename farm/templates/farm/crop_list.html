@@ -9,6 +9,7 @@
                 <th style="padding: 10px;">Name</th>
                 <th style="padding: 10px;">Planting Date</th>
                 <th style="padding: 10px;">Harvest Date</th>
+                <th style="padding: 10px;">Growth Stage</th>
                 <th style="padding: 10px;">Actions</th>
             </tr>
             {% for crop in crops %}
@@ -16,6 +17,10 @@
                     <td style="padding: 10px;">{{ crop.name }}</td>
                     <td style="padding: 10px;">{{ crop.planting_date }}</td>
                     <td style="padding: 10px;">{{ crop.harvest_date }}</td>
+                    <td style="padding: 10px;">
+                        {% if crop.growth_stage == 'planted' %}🌱{% elif crop.growth_stage == 'growing' %}🌿{% else %}🌾{% endif %}
+                        {{ crop.growth_stage|capfirst }}
+                    </td>
                     <td style="padding: 10px;">
                         <a href="{% url 'farm:crop_update' crop.id %}" style="color: #4a7a2e;">Edit</a> |
                         <a href="{% url 'farm:crop_delete' crop.id %}" style="color: #a94442;">Delete</a>
