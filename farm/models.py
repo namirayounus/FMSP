@@ -47,7 +47,7 @@ class Crop(models.Model):
         created_date = self.created_at.date() if self.pk else today
         if today >= self.harvest_date:
             self.growth_stage = 'ready'
-        elif today > created_date:
+        elif today > self.planting_date:
             self.growth_stage = 'growing'
         else:
             self.growth_stage = 'planted'
