@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
-from .models import Task, Crop, Livestock, Finance, Profile
-from .forms import TaskForm, CropForm, LivestockForm, FinanceForm, ProfileForm
+from .models import Task, Crop, Livestock, Finance, Profile, HealthLog
+from .forms import TaskForm, CropForm, LivestockForm, FinanceForm, ProfileForm, HealthLogForm
 from django.utils import timezone
 from datetime import timedelta
 
@@ -158,6 +158,42 @@ def livestock_delete(request, livestock_id):
         livestock.delete()
         return redirect('farm:livestock_list')
     return render(request, 'farm/livestock_confirm_delete.html', {'livestock': livestock})
+
+@login_required
+def health_log_create(request, livestock_id):
+    livestock = Livestock.objects.get(id=livestock_id, user=request.user)
+    if request.method == 'POST':
+        form = HealthLogForm(request.POST)
+        if form.is_valid():
+            health_log = form.save(commit=False)
+            health_log.livestock = livestock
+            health_log.save()
+            return redirect('farm:livestock_list')
+    else:
+        form = HealthLogForm()
+    return render(request, 'farm/health_log_form.html', {'form': form, 'livestock': livestock, 'action': 'Add'})
+
+@login_required
+def health_log_update(request, livestock_id, log_id):
+    livestock = Livestock.objects.get(id=livestock_id, user=request.user)
+    health_log = HealthLog.objects.get(id=log_id, livestock=livestock)
+    if request.method == 'POST':
+        form = HealthLogForm(request.POST, instance=health_log)
+        if form.is_valid():
+            form.save()
+            return redirect('farm:livestock_list')
+    else:
+        form = HealthLogForm(instance=health_log)
+    return render(request, 'farm/health_log_form.html', {'form': form, 'livestock': livestock, 'action': 'Update'})
+
+@login_required
+def health_log_delete(request, livestock_id, log_id):
+    livestock = Livestock.objects.get(id=livestock_id, user=request.user)
+    health_log = HealthLog.objects.get(id=log_id, livestock=livestock)
+    if request.method == 'POST':
+        health_log.delete()
+        return redirect('farm:livestock_list')
+    return render(request, 'farm/health_log_confirm_delete.html', {'health_log': health_log, 'livestock': livestock})
 
 @login_required
 def finance_list(request):

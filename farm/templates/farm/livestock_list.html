@@ -20,11 +20,24 @@
                     <td style="padding: 10px;">{{ animal.health_status }}</td>
                     <td style="padding: 10px;">
                         <a href="{% url 'farm:livestock_update' animal.id %}" style="color: #4a7a2e;">Edit</a> |
-                        <a href="{% url 'farm:livestock_delete' animal.id %}" style="color: #a94442;">Delete</a>
+                        <a href="{% url 'farm:livestock_delete' animal.id %}" style="color: #a94442;">Delete</a> |
+                        <a href="{% url 'farm:health_log_create' animal.id %}" style="color: #4a7a2e;">Add Health Log</a>
                     </td>
                 </tr>
             {% endfor %}
         </table>
+        {% if animal.health_logs.all %}
+                    <h4 style="color: #a94442; margin-top: 15px;">Health Logs 🐾</h4>
+                    <ul style="list-style-type: none; padding: 0; background-color: #f8d7da; border-radius: 5px; padding: 10px;">
+                        {% for log in animal.health_logs.all %}
+                            <li style="margin-bottom: 10px;">
+                                {{ log.date }}: {{ log.notes }}
+                                <a href="{% url 'farm:health_log_update' animal.id log.id %}" style="color: #4a7a2e; margin-left: 10px;">Edit</a> |
+                                <a href="{% url 'farm:health_log_delete' animal.id log.id %}" style="color: #a94442;">Delete</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
     {% else %}
         <p>No livestock yet. Start by adding one!</p>
     {% endif %}

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Task, Crop, Livestock, Finance, Profile
+from .models import Task, Crop, Livestock, Finance, Profile, HealthLog
 
 class TaskForm(forms.ModelForm):
     class Meta:
@@ -38,3 +38,11 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['profile_picture']
+
+class HealthLogForm(forms.ModelForm):
+    class Meta:
+        model = HealthLog
+        fields = ['date', 'notes']
+        widgets = {
+            'date': forms.DateInput(attrs={'type': 'date'}),
+        }

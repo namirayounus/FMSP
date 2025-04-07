@@ -67,6 +67,15 @@ class Livestock(models.Model):
     def __str__(self):
         return f"{self.name} ({self.type})"
     
+class HealthLog(models.Model):
+    livestock = models.ForeignKey(Livestock, on_delete=models.CASCADE, related_name='health_logs')
+    date = models.DateField()
+    notes = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.livestock.name} - {self.date}"
+    
 class Finance(models.Model):
     TRANSACTION_TYPES = [
         ('income', 'Income'),
