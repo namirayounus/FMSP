@@ -199,7 +199,15 @@ def health_log_delete(request, livestock_id, log_id):
 @login_required
 def finance_list(request):
     finances = Finance.objects.filter(user=request.user)
-    return render(request, 'farm/finance_list.html', {'finances': finances})
+    total_income = Finance.objects.filter(user=request.user, transaction_type='income').aggregate(total=models.Sum('amount'))['total'] or 0
+    total_expenses = Finance.objects.filter(user=request.user, transaction_type='expense').aggregate(total=models.Sum('amount'))['total'] or 0
+    net_profit = total_income - total_expenses
+    return render(request, 'farm/finance_list.html', {
+        'finances': finances,
+        'total_income': total_income,
+        'total_expenses': total_expenses,
+        'net_profit': net_profit
+    })
 
 @login_required
 def finance_create(request):
