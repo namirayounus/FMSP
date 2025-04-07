@@ -3,16 +3,16 @@
 {% block content %}
     <h2>Your Finances</h2>
     <div style="background-color: #f0f7e6; border: 2px solid #4a7a2e; padding: 15px; margin-bottom: 20px; border-radius: 5px; text-align: center;">
-        <h3 style="color: #4a7a2e; margin-top: 0;">Financial Summary 💰</h3>
+        <h3 style="color: #4a7a2e; margin-top: 0;">Financial Summary</h3>
         <p style="font-size: 16px; color: #2e4a1e;">Total Income: ${{ total_income|floatformat:2 }}</p>
         <p style="font-size: 16px; color: #2e4a1e;">Total Expenses: ${{ total_expenses|floatformat:2 }}</p>
-        {% if net_profit >= 0 %}
+        {% if is_profit %}
             <p style="font-size: 18px; font-weight: bold; color: #4a7a2e;">
-                Profit: ${{ net_profit|floatformat:2 }}
+                Profit: ${{ profit_or_loss_amount|floatformat:2 }}
             </p>
         {% else %}
             <p style="font-size: 18px; font-weight: bold; color: #a94442;">
-                Loss: ${{ net_profit|abs|floatformat:2 }}
+                Loss: ${{ profit_or_loss_amount|floatformat:2 }}
             </p>
         {% endif %}
     </div>

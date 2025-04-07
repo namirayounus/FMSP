@@ -203,11 +203,14 @@ def finance_list(request):
     total_income = Finance.objects.filter(user=request.user, transaction_type='income').aggregate(total=models.Sum('amount'))['total'] or 0
     total_expenses = Finance.objects.filter(user=request.user, transaction_type='expense').aggregate(total=models.Sum('amount'))['total'] or 0
     net_profit = total_income - total_expenses
+    is_profit = net_profit >= 0
+    profit_or_loss_amount = net_profit if is_profit else abs(net_profit)
     return render(request, 'farm/finance_list.html', {
         'finances': finances,
         'total_income': total_income,
         'total_expenses': total_expenses,
-        'net_profit': net_profit
+        'is_profit': is_profit,
+        'profit_or_loss_amount': profit_or_loss_amount
     })
 
 @login_required
