@@ -2,8 +2,17 @@
 
 {% block content %}
     {% if user.is_authenticated %}
-        <p>Hello, {{ user.username }}! Manage your farm with ease.</p>
+        <div style="max-width: 600px; margin: 20px auto; background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.1); border: 2px solid #8ab86d; text-align: center;">
+            <h2 style="color: #4a7a2e; margin-top: 0;">Welcome, {{ user.username }}! {% if user.profile.role == 'owner' %}🌾{% else %}🛠️{% endif %}</h2>
+            <p><a href="{% url 'farm:profile_update' %}" style="color: #4a7a2e; text-decoration: underline;">Edit Profile</a></p>
+        </div>
+        {% if user.profile.role == 'owner' %}
+            <p><a href="{% url 'farm:home' %}" style="color: #4a7a2e;">Manage Farm</a></p>
+        {% else %}
+            <p><a href="{% url 'farm:home' %}" style="color: #4a7a2e;">View Your Tasks</a></p>
+        {% endif %}
     {% else %}
         <p>Please log in or register to manage your farm.</p>
+        <p><a href="{% url 'farm:register' %}" style="color: #4a7a2e;">Register</a></p>
     {% endif %}
 {% endblock %}
