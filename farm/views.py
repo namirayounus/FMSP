@@ -59,7 +59,12 @@ def task_create(request):
             task.save()
             return redirect('farm:home')
     else:
+        # Only show workers in the dropdown
         form = TaskForm()
+        if request.user.profile.role == 'owner':
+            form.fields['worker'].queryset = User.objects.filter(profile__role='worker')
+        else:
+            form.fields['worker'].widget = forms.HiddenInput()  # Hide for workers
     return render(request, 'farm/task_form.html', {'form': form, 'action': 'Create'})
 
 @login_required
@@ -72,6 +77,10 @@ def task_update(request, task_id):
             return redirect('farm:home')
     else:
         form = TaskForm(instance=task)
+        if request.user.profile.role == 'owner':
+            form.fields['worker'].queryset = User.objects.filter(profile__role='worker')
+        else:
+            form.fields['worker'].widget = forms.HiddenInput()  # Hide for workers
     return render(request, 'farm/task_form.html', {'form': form, 'action': 'Update'})
 
 @login_required

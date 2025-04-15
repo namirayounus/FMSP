@@ -3,7 +3,7 @@
 {% block content %}
     {% if user.is_authenticated %}
         <div style="max-width: 600px; margin: 20px auto; background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.1); border: 2px solid #8ab86d; text-align: center;">
-            <h2 style="color: #4a7a2e; margin-top: 0;">Welcome, {{ user.username }}! 🌾</h2>
+            <h2 style="color: #4a7a2e; margin-top: 0;">Welcome, {{ user.username }}! {% if user.profile.role == 'owner' %}🌾{% else %}🛠️{% endif %}</h2>
             {% if user.profile.profile_picture %}
                 <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture" style="width: 100px; height: 100px; border-radius: 50%; border: 3px solid #4a7a2e; object-fit: cover; margin-bottom: 10px;">
             {% else %}
@@ -19,16 +19,21 @@
                     {% for task in upcoming_tasks %}
                         <li style="margin-bottom: 10px;">
                             <span style="color: #4a7a2e;">{{ task.description }}</span> - Due: {{ task.due_date }}{% if task.status == 'overdue' %}<span style="color: #a94442; font-weight: bold;">(Overdue!)</span>{% endif %}
+                            {% if task.worker %} (Assigned to: {{ task.worker.username }}){% endif %}
                         </li>
                     {% endfor %}
                 </ul>
             </div>
         {% endif %}
-        <p><a href="{% url 'farm:dashboard' %}" style="display: inline-block; background-color: #4a7a2e; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin-bottom: 20px;">Dashboard</a>
-        <a href="{% url 'farm:crop_list' %}" style="display: inline-block; background-color: #4a7a2e; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin-bottom: 20px;">Crops</a>
-        <a href="{% url 'farm:livestock_list' %}" style="display: inline-block; background-color: #4a7a2e; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin-bottom: 20px;">Livestock</a>
-        <a href="{% url 'farm:finance_list' %}" style="display: inline-block; background-color: #4a7a2e; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin-bottom: 20px;">Finances</a>
-        <a href="{% url 'farm:inventory_list' %}" style="display: inline-block; background-color: #4a7a2e; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin-bottom: 20px;">Inventory</a></p>
+        {% if user.profile.role == 'owner' %}
+            <p><a href="{% url 'farm:dashboard' %}" style="display: inline-block; background-color: #4a7a2e; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin-bottom: 20px;">Dashboard</a>
+            <a href="{% url 'farm:crop_list' %}" style="display: inline-block; background-color: #4a7a2e; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin-bottom: 20px;">Crops</a>
+            <a href="{% url 'farm:livestock_list' %}" style="display: inline-block; background-color: #4a7a2e; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin-bottom: 20px;">Livestock</a>
+            <a href="{% url 'farm:finance_list' %}" style="display: inline-block; background-color: #4a7a2e; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin-bottom: 20px;">Finances</a>
+            <a href="{% url 'farm:inventory_list' %}" style="display: inline-block; background-color: #4a7a2e; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin-bottom: 20px;">Inventory</a></p>
+        {% else %}
+            <p><a href="{% url 'farm:home' %}" style="color: #4a7a2e;">View Tasks</a></p>
+        {% endif %}
         <h2>Your Farm Tasks</h2>
         <form method="get" style="margin-bottom: 20px;">
             <input type="text" name="search" value="{{ search_query }}" placeholder="Search tasks by description..." style="padding: 8px; width: 70%; border: 1px solid #4a7a2e; border-radius: 5px;">
@@ -42,6 +47,7 @@
                     <th style="padding: 10px;">Due Date</th>
                     <th style="padding: 10px;">Completed</th>
                     <th style="padding: 10px;">Status</th>
+                    <th style="padding: 10px;">Assigned To</th>
                     <th style="padding: 10px;">Actions</th>
                 </tr>
                 {% for task in tasks %}
@@ -50,6 +56,7 @@
                         <td style="padding: 10px;">{{ task.due_date }}</td>
                         <td style="padding: 10px;">{% if task.completed %}Yes{% else %}No{% endif %}</td>
                         <td style="padding: 10px; {% if task.status == 'overdue' %}color: #a94442; font-weight: bold;{% endif %}">{{ task.status|capfirst }}</td>
+                        <td style="padding: 10px;">{% if task.worker %}{{ task.worker.username }}{% else %}Unassigned{% endif %}</td>
                         <td style="padding: 10px;">
                             <a href="{% url 'farm:task_update' task.id %}" style="color: #4a7a2e;">Edit</a> |
                             <a href="{% url 'farm:task_delete' task.id %}" style="color: #a94442;">Delete</a>

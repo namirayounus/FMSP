@@ -4,7 +4,7 @@ from .models import Task, Crop, Livestock, Finance, Profile, HealthLog, Inventor
 class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
-        fields = ['description', 'due_date', 'completed','status']
+        fields = ['description', 'due_date', 'completed','status','worker']
         widgets = {
             'due_date': forms.DateInput(attrs={'type': 'date'}),
         }
@@ -37,7 +37,7 @@ class FinanceForm(forms.ModelForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['profile_picture']
+        fields = ['profile_picture','role']
 
 class HealthLogForm(forms.ModelForm):
     class Meta:

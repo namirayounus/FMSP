@@ -10,6 +10,7 @@ class Task(models.Model):
         ('overdue', 'Overdue'),
     ]
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    worker = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='assigned_tasks')
     description = models.CharField(max_length=200)
     due_date = models.DateField()
     completed = models.BooleanField(default=False)
@@ -101,8 +102,13 @@ class Finance(models.Model):
         return f"{self.transaction_type.capitalize()} - {self.amount}"
     
 class Profile(models.Model):
+    ROLE_CHOICES = [
+        ('owner', 'Owner'),
+        ('worker', 'Worker'),
+    ]
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='owner')
 
     def __str__(self):
         return f"{self.user.username}'s Profile"
