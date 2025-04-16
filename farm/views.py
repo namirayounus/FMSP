@@ -28,16 +28,7 @@ def logout_user(request):
 @login_required
 def profile_update(request):
     profile, created = Profile.objects.get_or_create(user=request.user)
-    if request.method == 'POST':
-        form = ProfileForm(request.POST, instance=profile)
-        if form.is_valid():
-            form.save()
-            return redirect('farm:home')
-    else:
-        form = ProfileForm(instance=profile)
-        if request.user.profile.role != 'owner':
-            form.fields['role'].widget = forms.HiddenInput()  # Hide role field for non-owners
-    return render(request, 'farm/profile_form.html', {'form': form})
+    return render(request, 'farm/profile_form.html', {'profile': profile})
 
 @login_required
 def worker_create(request):

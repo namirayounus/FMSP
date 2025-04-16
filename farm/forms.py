@@ -6,7 +6,7 @@ from .models import Profile
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['role']
+        fields = []
 
 class WorkerCreationForm(UserCreationForm):
     class Meta:
