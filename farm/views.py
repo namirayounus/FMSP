@@ -13,6 +13,7 @@ def register(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
+            Profile.objects.create(user=user, role='owner')  # Set as Owner
             login(request, user)
             return redirect('farm:home')
     else:
@@ -33,4 +34,20 @@ def profile_update(request):
             return redirect('farm:home')
     else:
         form = ProfileForm(instance=profile)
+        if request.user.profile.role != 'owner':
+            form.fields['role'].widget = forms.HiddenInput()  # Hide role field for non-owners
     return render(request, 'farm/profile_form.html', {'form': form})
+
+@login_required
+def worker_create(request):
+    if request.user.profile.role != 'owner':
+        return redirect('farm:home')  # Only owners can access
+    if request.method == 'POST':
+        form = WorkerCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            Profile.objects.create(user=user, role='worker')  # Set as Worker
+            return redirect('farm:home')
+    else:
+        form = WorkerCreationForm()
+    return render(request, 'farm/worker_form.html', {'form': form})

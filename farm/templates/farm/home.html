@@ -8,6 +8,7 @@
         </div>
         {% if user.profile.role == 'owner' %}
             <p><a href="{% url 'farm:home' %}" style="color: #4a7a2e;">Manage Farm</a></p>
+            <p><a href="{% url 'farm:worker_create' %}" style="color: #4a7a2e;">Add New Worker</a></p>
         {% else %}
             <p><a href="{% url 'farm:home' %}" style="color: #4a7a2e;">View Your Tasks</a></p>
         {% endif %}
